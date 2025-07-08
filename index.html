@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorteio QR Code</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .success {
+      color: green;
+      margin-top: 1rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Participe do Sorteio</h2>
+    <form id="sorteioForm" autocomplete="off">
+      <label for="nome">Nome completo:</label>
+      <input type="text" id="nome" name="nome" required>
+      <button type="submit">Participar</button>
+      <div class="success" id="mensagemSucesso">Inscrição registrada com sucesso!</div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('sorteioForm');
+    const mensagem = document.getElementById('mensagemSucesso');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById('nome').value.trim();
+      if (!nome) return;
+
+      try {
+        await fetch('https://api.sheetmonkey.io/form/YOUR_UNIQUE_ID', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ Nome: nome })
+        });
+
+        form.reset();
+        mensagem.style.display = 'block';
+      } catch (error) {
+        alert('Erro ao registrar sua inscrição. Tente novamente.');
+      }
+    });
+  </script>
+</body>
+</html>
